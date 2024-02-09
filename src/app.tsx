@@ -50,28 +50,53 @@ const StyledSection = styled.section`
 export default function App() {
   const [dados, setDados] = useState<Dados[]>([]);
   const [carregando, setCarregando] = useState(true);
+  const [novaTarefa, setNovaTarefa] = useState('');
 
   useEffect(() => {
-    obterTodos()
-      .then((data) => {
-        console.log(data)
-        setDados(data);
-        setCarregando(false);
-      })
-      .catch((error) => {
-        setCarregando(false);
-        // Lidar com erros
-        console.error("Erro ao carregar dados:", error);
-      });
+    const dadosLocaisString = localStorage.getItem('todos');
+    const dadosLocais = dadosLocaisString ? JSON.parse(dadosLocaisString) : [];
+    if (dadosLocais.length > 0) {
+      setDados(dadosLocais);
+      setCarregando(false);
+    } else {
+      obterTodos()
+        .then((dadosDaApi) => {
+          setDados(dadosDaApi);
+          setCarregando(false);
+        })
+        .catch((erro) => {
+          console.error('Erro ao carregar dados iniciais:', erro);
+          setCarregando(false);
+        });
+    }
   }, []);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && novaTarefa.trim() !== '') {
+      const novaTarefaObj: Dados = { id: (dados.length + 1).toString(), title: novaTarefa, isDone: false };
+      const novosDados = [...dados, novaTarefaObj];
+  
+      // Atualiza o localStorage
+      localStorage.setItem('todos', JSON.stringify(novosDados));
+  
+      // Atualiza o estado
+      setDados(novosDados);
+      setNovaTarefa('');
+    }
+  };
 
   return (
     <StyledContainer>
       <StyledH1>Todos</StyledH1>
       <StyledSection>
-      <div className="warp-newtodo" style={{ fontSize: '24px', width: '60px' }}>
-        <FontAwesomeIcon icon={faChevronDown} />
-        <StyledInput placeholder="What needs to be done?"></StyledInput>
+      <div className="warp-newtodo">
+        <FontAwesomeIcon style={{ fontSize: '24px', width: '60px' }} icon={faChevronDown} />
+        <StyledInput
+        placeholder="What needs to be done?"
+        value={novaTarefa}
+        onChange={(e) => setNovaTarefa(e.target.value)}
+        onKeyDown={handleKeyDown}
+        ></StyledInput>
       </div>
       
       {carregando && <p>Carregando...</p>}
