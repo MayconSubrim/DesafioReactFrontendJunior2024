@@ -3,6 +3,10 @@ import { obterTodos } from "./service/todoservice";
 import { Dados } from "./model/model";
 import styled from 'styled-components';
 import './style.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+
+
 
 const StyledContainer = styled.div`
   text-align: start;
@@ -19,10 +23,25 @@ const StyledH1 = styled.h1`
   width: 100%;
 `;
 
+const StyledInput = styled.input.attrs({ type: 'text' })`
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: inherit;
+  font-family: inherit;
+  font-size: 24px;
+  font-weight: inherit;
+  line-height: 1.4em;
+  margin: 0;
+  padding: 6px;
+  position: relative;
+  border : none;
+  width : 100%;
+  outline : none;
+`
+
 const StyledSection = styled.section`
   background: #fff;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,.2), 0 25px 50px 0 rgba(0,0,0,.1);
-  margin: 130px 0 40px;
   position: relative;
 `;
 
@@ -50,6 +69,11 @@ export default function App() {
     <StyledContainer>
       <StyledH1>Todos</StyledH1>
       <StyledSection>
+      <div className="warp-newtodo" style={{ fontSize: '24px', width: '60px' }}>
+        <FontAwesomeIcon icon={faChevronDown} />
+        <StyledInput placeholder="What needs to be done?"></StyledInput>
+      </div>
+      
       {carregando && <p>Carregando...</p>}
 
       {!carregando && (
