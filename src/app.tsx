@@ -45,6 +45,47 @@ const StyledSection = styled.section`
   position: relative;
 `;
 
+const StyledTodo = styled.div`
+  border-bottom: 1px solid #ededed;
+  font-size: 24px;
+  position: relative;
+  display : flex;
+  align-items : center;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  input[type="checkbox"] {
+    appearance: none;
+    height: 35px;
+    width : 35px;
+    border: 2px solid #999;
+    border-radius: 50%;
+    margin-left: 10px;
+    &:checked {
+      border-color: #4CAF50;      // Cor da borda quando marcado
+      &::after {
+        content: '✔'; // Sinal de confirmação (pode ser substituído por um ícone)
+        color: #4CAF50;  // Cor do sinal de confirmação
+        font-size: 26px; // Tamanho do sinal de confirmação
+        display: block;
+        text-align: center;
+      }
+    }
+  }
+
+  label {
+    padding: 15px 15px 15px 30px;
+  }
+
+  li {
+    width : 100%;
+    display : flex;
+    align-items : center;
+  }
+`
+
 
 
 export default function App() {
@@ -102,9 +143,11 @@ export default function App() {
       {carregando && <p>Carregando...</p>}
 
       {!carregando && (
-        <ul>
+        <ul style={{listStyle: "none", padding : "0"}}>
           {dados.map((item) => (
-            <li key={item.id}>ID : {item.id} <br /> title : {item.title}</li>
+            <StyledTodo>
+              <li key={item.id}><input type="checkbox" /><label>{item.title}</label></li>
+            </StyledTodo>
           ))}
         </ul>
       )}
