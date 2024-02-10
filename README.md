@@ -48,3 +48,15 @@ O foco deste teste é a implementação de uma lista de tarefas, onde você deve
 Tem um tempinho a mais? Acha que pode fazer mais? Então aqui vai alguns desafios para seu projeto, que serve como um plus no seu teste!
 
 - E se essa aplicação tiver testes?
+
+
+
+## proximos passos : 
+
+() checkbox vinculado com isdone;
+() remover todo com um botao ou icone x;
+() editar todo ao clicar 2x em uma todo;
+() filtros para mostrar todo ja feitas, nao feitas e todas;
+() botao pra limpar todas todos;
+() botao para limpar todos feitas;
+
