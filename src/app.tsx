@@ -4,8 +4,7 @@ import { Dados } from "./model/model";
 import styled from 'styled-components';
 import './style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-
+import { faChevronDown, faTimes  } from '@fortawesome/free-solid-svg-icons';
 
 
 const StyledContainer = styled.div`
@@ -84,6 +83,13 @@ const StyledTodo = styled.div`
     display : flex;
     align-items : center;
   }
+
+  svg {
+    margin-left: auto;
+    margin-right: 10px;
+    color: black; // Cor padrão
+    transition: color 0.3s; // Adiciona uma transição suave para a mudança de cor
+  }
 `
 
 
@@ -92,6 +98,7 @@ export default function App() {
   const [dados, setDados] = useState<Dados[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [novaTarefa, setNovaTarefa] = useState('');
+  const [mouseSobreId, setMouseSobreId] = useState(null);
 
   useEffect(() => {
     const dadosLocaisString = localStorage.getItem('todos');
@@ -126,6 +133,20 @@ export default function App() {
     }
   };
 
+  const removerItem = (id: string) => {
+    const novaLista = dados.filter((item) => item.id !== id);
+    localStorage.setItem('todos', JSON.stringify(novaLista));
+    setDados(novaLista);
+  };
+
+  const handleMouseEnter = (id : any) => {
+    setMouseSobreId(id);
+  };
+
+  const handleMouseLeave = () => {
+    setMouseSobreId(null);
+  };
+
   return (
     <StyledContainer>
       <StyledH1>Todos</StyledH1>
@@ -145,8 +166,8 @@ export default function App() {
       {!carregando && (
         <ul style={{listStyle: "none", padding : "0"}}>
           {dados.map((item) => (
-            <StyledTodo>
-              <li key={item.id}><input type="checkbox" /><label>{item.title}</label></li>
+            <StyledTodo key={item.id} onMouseEnter={() => handleMouseEnter(item.id)} onMouseLeave={handleMouseLeave}>
+              <li key={item.id}><input type="checkbox" /><label>{item.title}</label>{mouseSobreId === item.id && (<FontAwesomeIcon icon={faTimes} onClick={() => removerItem(item.id)} style={{ marginLeft: 'auto', marginRight: "10px", cursor: 'pointer', color: mouseSobreId === item.id ? 'red' : 'black',transition: 'color 5s', }}/>)}</li>
             </StyledTodo>
           ))}
         </ul>
