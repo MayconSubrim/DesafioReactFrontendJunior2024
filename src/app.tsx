@@ -62,6 +62,7 @@ const StyledTodo = styled.div`
     border: 2px solid #999;
     border-radius: 50%;
     margin-left: 10px;
+    outline : none;
     &:checked {
       border-color: #4CAF50;      // Cor da borda quando marcado
       &::after {
@@ -86,7 +87,7 @@ const StyledTodo = styled.div`
 
   svg {
     margin-left: auto;
-    margin-right: 10px;
+    margin-right: 20px;
     color: black; // Cor padrão
     transition: color 0.3s; // Adiciona uma transição suave para a mudança de cor
   }
@@ -99,6 +100,8 @@ export default function App() {
   const [carregando, setCarregando] = useState(true);
   const [novaTarefa, setNovaTarefa] = useState('');
   const [mouseSobreId, setMouseSobreId] = useState(null);
+  const [editingTask, setEditingTask] = useState({ id: null, newTitle: '' });
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const dadosLocaisString = localStorage.getItem('todos');
@@ -155,6 +158,39 @@ export default function App() {
     setDados(updatedTarefas);
   };
 
+  const handleMouseDoubleClick = (id : any) => {
+    setEditingTask({ id, newTitle: dados.find((item) => item.id === id)?.title || '' });
+    setIsEditing(true);
+  };
+  
+
+  const handleEditInputChange = (event: { target: { value: any; }; }) => {
+    setEditingTask({ ...editingTask, newTitle: event.target.value });
+  };
+
+  const handleEditBlur = () => {
+    if (editingTask.id && editingTask.newTitle) {
+      const updatedTarefas = dados.map((tarefa) =>
+        tarefa.id === editingTask.id ? { ...tarefa, title: editingTask.newTitle } : tarefa
+      );
+  
+      localStorage.setItem('todos', JSON.stringify(updatedTarefas));
+      setDados(updatedTarefas);
+      setEditingTask({ id: null, newTitle: '' });
+      setIsEditing(false);
+    } else {
+      // Se id ou newTitle estiverem ausentes, sair do modo de edição sem salvar
+      setIsEditing(false);
+    }
+  };
+
+
+  const handleEditKeyPress = (event: { key: string; }) => {
+    if (event.key === 'Enter') {
+      handleEditBlur();
+    }
+  };
+
   return (
     <StyledContainer>
       <StyledH1>Todos</StyledH1>
@@ -172,10 +208,32 @@ export default function App() {
       {carregando && <p>Carregando...</p>}
 
       {!carregando && (
-        <ul style={{listStyle: "none", padding : "0"}}>
+        <ul style={{listStyle: "none", padding : "0"}} onBlur={handleEditBlur}>
           {dados.map((item) => (
             <StyledTodo key={item.id} onMouseEnter={() => handleMouseEnter(item.id)} onMouseLeave={handleMouseLeave}>
-              <li key={item.id}><input type="checkbox" checked={item.isDone} onChange={() => handleToggleDone(item.id)} /><label>{item.title}</label>{mouseSobreId === item.id && (<FontAwesomeIcon icon={faTimes} onClick={() => removerItem(item.id)} style={{ marginLeft: 'auto', marginRight: "10px", cursor: 'pointer', color: mouseSobreId === item.id ? 'red' : 'black',transition: 'color 5s', }}/>)}</li>
+                <li key={item.id}>
+                {isEditing && editingTask.id === item.id ? (
+                <input
+                type="text"
+                value={editingTask.newTitle}
+                onChange={handleEditInputChange}
+                onBlur={handleEditBlur}
+                onKeyPress={handleEditKeyPress}
+                style={{width : '100%', height : '58px', outline: 'none', border : '2px solid red', fontSize : '24px', paddingLeft : '30px'  }}
+                />
+                ) : (
+                <>
+                <input type="checkbox" checked={item.isDone} onChange={() => handleToggleDone(item.id)} />
+                <label onDoubleClick={() => handleMouseDoubleClick(item.id)}>{item.title}</label>
+                { mouseSobreId === item.id && (
+                <FontAwesomeIcon icon={faTimes} 
+                onClick={() => removerItem(item.id)} 
+                style={{ marginLeft: 'auto', 
+                marginRight: "10px", 
+                cursor: 'pointer', 
+                color: mouseSobreId === item.id ? 'red' : 'black',
+                transition: 'color 5s', 
+                }}/>)}</>)}</li>
             </StyledTodo>
           ))}
         </ul>

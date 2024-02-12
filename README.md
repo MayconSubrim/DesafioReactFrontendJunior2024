@@ -55,8 +55,9 @@ Tem um tempinho a mais? Acha que pode fazer mais? Então aqui vai alguns desafio
 
 (x) checkbox vinculado com isdone;
 (x) remover todo com um botao ou icone x;
-() editar todo ao clicar 2x em uma todo;
+(x) editar todo ao clicar 2x em uma todo;
 () filtros para mostrar todo ja feitas, nao feitas e todas;
 () botao pra limpar todas todos;
 () botao para limpar todos feitas;
+() modularizar o app para deixar mais clean
 
