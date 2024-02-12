@@ -147,6 +147,14 @@ export default function App() {
     setMouseSobreId(null);
   };
 
+  const handleToggleDone = (id: string) => {
+    const updatedTarefas = dados.map((tarefa) =>
+      tarefa.id === id ? { ...tarefa, isDone: !tarefa.isDone } : tarefa
+    );
+    localStorage.setItem('todos', JSON.stringify(updatedTarefas));
+    setDados(updatedTarefas);
+  };
+
   return (
     <StyledContainer>
       <StyledH1>Todos</StyledH1>
@@ -167,7 +175,7 @@ export default function App() {
         <ul style={{listStyle: "none", padding : "0"}}>
           {dados.map((item) => (
             <StyledTodo key={item.id} onMouseEnter={() => handleMouseEnter(item.id)} onMouseLeave={handleMouseLeave}>
-              <li key={item.id}><input type="checkbox" /><label>{item.title}</label>{mouseSobreId === item.id && (<FontAwesomeIcon icon={faTimes} onClick={() => removerItem(item.id)} style={{ marginLeft: 'auto', marginRight: "10px", cursor: 'pointer', color: mouseSobreId === item.id ? 'red' : 'black',transition: 'color 5s', }}/>)}</li>
+              <li key={item.id}><input type="checkbox" checked={item.isDone} onChange={() => handleToggleDone(item.id)} /><label>{item.title}</label>{mouseSobreId === item.id && (<FontAwesomeIcon icon={faTimes} onClick={() => removerItem(item.id)} style={{ marginLeft: 'auto', marginRight: "10px", cursor: 'pointer', color: mouseSobreId === item.id ? 'red' : 'black',transition: 'color 5s', }}/>)}</li>
             </StyledTodo>
           ))}
         </ul>
