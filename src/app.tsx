@@ -1,97 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { obterTodos } from "./service/todoservice";
 import { Dados } from "./model/model";
-import styled from 'styled-components';
+import {
+  StyledContainer,
+  StyledH1,
+  StyledInput,
+  StyledSection,
+  FontAwesomeIcon,
+  faChevronDown,
+} from "./styledcomponents";
+import TodoItem from "./components/todoItem";
 import './style.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faTimes  } from '@fortawesome/free-solid-svg-icons';
-
-
-const StyledContainer = styled.div`
-  text-align: start;
-`
-const StyledH1 = styled.h1`
-  color: #b83f45;
-  font-size: 80px;
-  font-weight: 200;
-  text-align: center;
-  -webkit-text-rendering: optimizeLegibility;
-  -moz-text-rendering: optimizeLegibility;
-  text-rendering: optimizeLegibility;
-  top: -140px;
-  width: 100%;
-`;
-
-const StyledInput = styled.input.attrs({ type: 'text' })`
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: inherit;
-  font-family: inherit;
-  font-size: 24px;
-  font-weight: inherit;
-  line-height: 1.4em;
-  margin: 0;
-  padding: 6px;
-  position: relative;
-  border : none;
-  width : 100%;
-  outline : none;
-`
-
-const StyledSection = styled.section`
-  background: #fff;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,.2), 0 25px 50px 0 rgba(0,0,0,.1);
-  position: relative;
-`;
-
-const StyledTodo = styled.div`
-  border-bottom: 1px solid #ededed;
-  font-size: 24px;
-  position: relative;
-  display : flex;
-  align-items : center;
-
-  &:last-child {
-    border-bottom: none;
-  }
-
-  input[type="checkbox"] {
-    appearance: none;
-    height: 35px;
-    width : 35px;
-    border: 2px solid #999;
-    border-radius: 50%;
-    margin-left: 10px;
-    outline : none;
-    &:checked {
-      border-color: #4CAF50;      // Cor da borda quando marcado
-      &::after {
-        content: '✔'; // Sinal de confirmação (pode ser substituído por um ícone)
-        color: #4CAF50;  // Cor do sinal de confirmação
-        font-size: 26px; // Tamanho do sinal de confirmação
-        display: block;
-        text-align: center;
-      }
-    }
-  }
-
-  label {
-    padding: 15px 15px 15px 30px;
-  }
-
-  li {
-    width : 100%;
-    display : flex;
-    align-items : center;
-  }
-
-  svg {
-    margin-left: auto;
-    margin-right: 20px;
-    color: black; // Cor padrão
-    transition: color 0.3s; // Adiciona uma transição suave para a mudança de cor
-  }
-`
 
 
 
@@ -124,13 +43,9 @@ export default function App() {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && novaTarefa.trim() !== '') {
-      const novaTarefaObj: Dados = { id: (dados.length + 1).toString(), title: novaTarefa, isDone: false };
+      const novaTarefaObj: Dados = { id: (Math.random().toString(36).substring(2)).toString(), title: novaTarefa, isDone: false };
       const novosDados = [...dados, novaTarefaObj];
-  
-      // Atualiza o localStorage
       localStorage.setItem('todos', JSON.stringify(novosDados));
-  
-      // Atualiza o estado
       setDados(novosDados);
       setNovaTarefa('');
     }
@@ -210,31 +125,20 @@ export default function App() {
       {!carregando && (
         <ul style={{listStyle: "none", padding : "0"}} onBlur={handleEditBlur}>
           {dados.map((item) => (
-            <StyledTodo key={item.id} onMouseEnter={() => handleMouseEnter(item.id)} onMouseLeave={handleMouseLeave}>
-                <li key={item.id}>
-                {isEditing && editingTask.id === item.id ? (
-                <input
-                type="text"
-                value={editingTask.newTitle}
-                onChange={handleEditInputChange}
-                onBlur={handleEditBlur}
-                onKeyPress={handleEditKeyPress}
-                style={{width : '100%', height : '58px', outline: 'none', border : '2px solid red', fontSize : '24px', paddingLeft : '30px'  }}
-                />
-                ) : (
-                <>
-                <input type="checkbox" checked={item.isDone} onChange={() => handleToggleDone(item.id)} />
-                <label onDoubleClick={() => handleMouseDoubleClick(item.id)}>{item.title}</label>
-                { mouseSobreId === item.id && (
-                <FontAwesomeIcon icon={faTimes} 
-                onClick={() => removerItem(item.id)} 
-                style={{ marginLeft: 'auto', 
-                marginRight: "10px", 
-                cursor: 'pointer', 
-                color: mouseSobreId === item.id ? 'red' : 'black',
-                transition: 'color 5s', 
-                }}/>)}</>)}</li>
-            </StyledTodo>
+                <TodoItem 
+                key={item.id}
+                item={item}
+                isEditing={isEditing}
+                editingTask={editingTask}
+                handleMouseEnter={handleMouseEnter}
+                handleMouseLeave={handleMouseLeave}
+                handleEditInputChange={handleEditInputChange}
+                handleEditBlur={handleEditBlur}
+                handleEditKeyPress={handleEditKeyPress}
+                handleToggleDone={handleToggleDone}
+                handleMouseDoubleClick={handleMouseDoubleClick}
+                removerItem={removerItem}
+                mouseSobreId={mouseSobreId}/>
           ))}
         </ul>
       )}

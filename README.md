@@ -59,5 +59,5 @@ Tem um tempinho a mais? Acha que pode fazer mais? Então aqui vai alguns desafio
 () filtros para mostrar todo ja feitas, nao feitas e todas;
 () botao pra limpar todas todos;
 () botao para limpar todos feitas;
-() modularizar o app para deixar mais clean
+(x) modularizar o app para deixar mais clean
 
