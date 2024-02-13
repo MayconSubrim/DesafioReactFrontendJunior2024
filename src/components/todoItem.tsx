@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Dados } from '../model/model';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -6,33 +6,64 @@ import { StyledTodo } from '../styledcomponents';
 
 interface TodoItemProps {
   item: Dados;
+  dados: Dados[];
+  setDados: React.Dispatch<React.SetStateAction<Dados[]>>;
   isEditing: boolean;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
   editingTask: { id: string | null; newTitle: string };
-  handleMouseEnter: (id: any) => void;
-  handleMouseLeave: () => void;
-  handleEditInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleEditBlur: () => void;
   handleEditKeyPress: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-  handleToggleDone: (id: string) => void;
-  handleMouseDoubleClick: (id: any) => void;
-  removerItem: (id: string) => void;
-  mouseSobreId: any;
+  setEditingTask: Dispatch<SetStateAction<{ id: null | string; newTitle: string }>>;
 }
 
 const TodoItem: React.FC<TodoItemProps> = ({
   item,
   isEditing,
+  setIsEditing,
   editingTask,
-  handleMouseEnter,
-  handleMouseLeave,
-  handleEditInputChange,
   handleEditBlur,
   handleEditKeyPress,
-  handleToggleDone,
-  handleMouseDoubleClick,
-  removerItem,
-  mouseSobreId,
+  setEditingTask,
+  dados,
+  setDados
 }) => {
+
+  const [mouseSobreId, setMouseSobreId] = useState(null);
+
+
+const removerItem = (id: string) => {
+  const novaLista = dados.filter((item) => item.id !== id);
+  localStorage.setItem('todos', JSON.stringify(novaLista));
+  setDados(novaLista);
+};
+
+const handleMouseEnter = (id : any) => {
+  setMouseSobreId(id);
+};
+
+const handleMouseLeave = () => {
+  setMouseSobreId(null);
+};
+
+const handleToggleDone = (id: string) => {
+  const updatedTarefas = dados.map((tarefa) =>
+    tarefa.id === id ? { ...tarefa, isDone: !tarefa.isDone } : tarefa
+  );
+  localStorage.setItem('todos', JSON.stringify(updatedTarefas));
+  setDados(updatedTarefas);
+};
+
+const handleMouseDoubleClick = (id : any) => {
+  setEditingTask({ id, newTitle: dados.find((item) => item.id === id)?.title || '' });
+  setIsEditing(true);
+};
+
+
+const handleEditInputChange = (event: { target: { value: any; }; }) => {
+  setEditingTask({ ...editingTask, newTitle: event.target.value });
+};
+
+
   return (
     <StyledTodo key={item.id} onMouseEnter={() => handleMouseEnter(item.id)} onMouseLeave={handleMouseLeave}>
       <li key={item.id}>

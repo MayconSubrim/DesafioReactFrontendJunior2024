@@ -16,12 +16,10 @@ import './style.css';
 
 export default function App() {
   const [dados, setDados] = useState<Dados[]>([]);
-  const [carregando, setCarregando] = useState(true);
-  const [novaTarefa, setNovaTarefa] = useState('');
-  const [mouseSobreId, setMouseSobreId] = useState(null);
-  const [editingTask, setEditingTask] = useState({ id: null, newTitle: '' });
+  const [carregando, setCarregando] = useState(true); 
+  const [novaTarefa, setNovaTarefa] = useState(''); 
   const [isEditing, setIsEditing] = useState(false);
-
+  const [editingTask, setEditingTask] = useState<{ id: string | null; newTitle: string }>({ id: null, newTitle: '' });
   useEffect(() => {
     const dadosLocaisString = localStorage.getItem('todos');
     const dadosLocais = dadosLocaisString ? JSON.parse(dadosLocaisString) : [];
@@ -49,39 +47,9 @@ export default function App() {
       setDados(novosDados);
       setNovaTarefa('');
     }
-  };
+  }; 
 
-  const removerItem = (id: string) => {
-    const novaLista = dados.filter((item) => item.id !== id);
-    localStorage.setItem('todos', JSON.stringify(novaLista));
-    setDados(novaLista);
-  };
-
-  const handleMouseEnter = (id : any) => {
-    setMouseSobreId(id);
-  };
-
-  const handleMouseLeave = () => {
-    setMouseSobreId(null);
-  };
-
-  const handleToggleDone = (id: string) => {
-    const updatedTarefas = dados.map((tarefa) =>
-      tarefa.id === id ? { ...tarefa, isDone: !tarefa.isDone } : tarefa
-    );
-    localStorage.setItem('todos', JSON.stringify(updatedTarefas));
-    setDados(updatedTarefas);
-  };
-
-  const handleMouseDoubleClick = (id : any) => {
-    setEditingTask({ id, newTitle: dados.find((item) => item.id === id)?.title || '' });
-    setIsEditing(true);
-  };
   
-
-  const handleEditInputChange = (event: { target: { value: any; }; }) => {
-    setEditingTask({ ...editingTask, newTitle: event.target.value });
-  };
 
   const handleEditBlur = () => {
     if (editingTask.id && editingTask.newTitle) {
@@ -94,12 +62,9 @@ export default function App() {
       setEditingTask({ id: null, newTitle: '' });
       setIsEditing(false);
     } else {
-      // Se id ou newTitle estiverem ausentes, sair do modo de edição sem salvar
       setIsEditing(false);
     }
   };
-
-
   const handleEditKeyPress = (event: { key: string; }) => {
     if (event.key === 'Enter') {
       handleEditBlur();
@@ -129,16 +94,14 @@ export default function App() {
                 key={item.id}
                 item={item}
                 isEditing={isEditing}
+                setIsEditing={setIsEditing}
                 editingTask={editingTask}
-                handleMouseEnter={handleMouseEnter}
-                handleMouseLeave={handleMouseLeave}
-                handleEditInputChange={handleEditInputChange}
                 handleEditBlur={handleEditBlur}
                 handleEditKeyPress={handleEditKeyPress}
-                handleToggleDone={handleToggleDone}
-                handleMouseDoubleClick={handleMouseDoubleClick}
-                removerItem={removerItem}
-                mouseSobreId={mouseSobreId}/>
+                setEditingTask={setEditingTask}
+                dados={dados}
+                setDados={setDados}
+                />
           ))}
         </ul>
       )}
