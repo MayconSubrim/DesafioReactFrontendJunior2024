@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { obterTodos } from "./service/todoservice";
 import { Dados } from "./model/model";
 import {
@@ -8,6 +9,7 @@ import {
   StyledSection,
   FontAwesomeIcon,
   faChevronDown,
+  StyledFooter,
 } from "./styledcomponents";
 import TodoItem from "./components/todoItem";
 import './style.css';
@@ -71,7 +73,10 @@ export default function App() {
     }
   };
 
+  const countIsDone = dados.filter(item => !item.isDone).length;
+
   return (
+    <Router>
     <StyledContainer>
       <StyledH1>Todos</StyledH1>
       <StyledSection>
@@ -88,24 +93,88 @@ export default function App() {
       {carregando && <p>Carregando...</p>}
 
       {!carregando && (
-        <ul style={{listStyle: "none", padding : "0"}} onBlur={handleEditBlur}>
-          {dados.map((item) => (
-                <TodoItem 
-                key={item.id}
-                item={item}
-                isEditing={isEditing}
-                setIsEditing={setIsEditing}
-                editingTask={editingTask}
-                handleEditBlur={handleEditBlur}
-                handleEditKeyPress={handleEditKeyPress}
-                setEditingTask={setEditingTask}
-                dados={dados}
-                setDados={setDados}
-                />
-          ))}
-        </ul>
+        
+          <Routes>
+          <Route
+            path=""
+            element={
+            <ul style={{listStyle: "none", padding : "0"}} onBlur={handleEditBlur}>
+              {dados.map((item) => (
+                    <TodoItem
+                    key={item.id}
+                    item={item}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    editingTask={editingTask}
+                    handleEditBlur={handleEditBlur}
+                    handleEditKeyPress={handleEditKeyPress}
+                    setEditingTask={setEditingTask}
+                    dados={dados}
+                    setDados={setDados}
+                    />
+            ))}
+          </ul>
+            }
+          />
+          <Route path="/completed" element={
+            <ul style={{ listStyle: "none", padding: "0" }} onBlur={handleEditBlur}>
+            {dados.map((item) => {
+              if (item.isDone) {
+                return (
+                  <TodoItem
+                    key={item.id}
+                    item={item}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    editingTask={editingTask}
+                    handleEditBlur={handleEditBlur}
+                    handleEditKeyPress={handleEditKeyPress}
+                    setEditingTask={setEditingTask}
+                    dados={dados}
+                    setDados={setDados}
+                  />
+                );
+              }
+              return null;
+            })}
+          </ul>
+          }/>
+          <Route path="/todone" element={
+            <ul style={{ listStyle: "none", padding: "0" }} onBlur={handleEditBlur}>
+            {dados.map((item) => {
+              if (!item.isDone) {
+                return (
+                  <TodoItem
+                    key={item.id}
+                    item={item}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    editingTask={editingTask}
+                    handleEditBlur={handleEditBlur}
+                    handleEditKeyPress={handleEditKeyPress}
+                    setEditingTask={setEditingTask}
+                    dados={dados}
+                    setDados={setDados}
+                  />
+                );
+              }
+              return null;
+            })}
+          </ul>
+          }/>
+          </Routes>
       )}
+       <StyledFooter>
+          <p>{countIsDone} items left!</p>
+          <div>
+            <Link to={"/"}><button>All</button></Link>
+            <Link to={"/todone"}><button>Active</button></Link>
+            <Link to={"/completed"}><button>Completed</button></Link>
+          </div>
+          <span>Clear completed</span>
+      </StyledFooter>
       </StyledSection>
     </StyledContainer>
+    </Router>
   );
 }
