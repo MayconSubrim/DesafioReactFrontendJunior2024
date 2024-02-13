@@ -56,9 +56,9 @@ Tem um tempinho a mais? Acha que pode fazer mais? Então aqui vai alguns desafio
 (x) checkbox vinculado com isdone;
 (x) remover todo com um botao ou icone x;
 (x) editar todo ao clicar 2x em uma todo;
-() filtros para mostrar todo ja feitas, nao feitas e todas com react router dom;
-() botao pra limpar todas todos;
-() botao para limpar todos feitas;
-() footer mostrando quantas todos faltam fazer;
+(x) filtros para mostrar todo ja feitas, nao feitas e todas com react router dom;
+(x) botao pra limpar todas todos;
+(x) botao para limpar todos feitas;
+(x) footer mostrando quantas todos faltam fazer;
 (x) modularizar o app para deixar mais clean
 

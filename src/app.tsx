@@ -75,13 +75,24 @@ export default function App() {
 
   const countIsDone = dados.filter(item => !item.isDone).length;
 
+  const ClearAll = () => {
+    setDados([])
+    localStorage.removeItem('todos');
+  }
+
+  const ClearCompleted = () => {
+    const completedData = dados.filter(item => !item.isDone);
+    setDados(completedData);
+    localStorage.setItem('todos', JSON.stringify(completedData));
+  }
+
   return (
     <Router>
     <StyledContainer>
       <StyledH1>Todos</StyledH1>
       <StyledSection>
       <div className="warp-newtodo">
-        <FontAwesomeIcon style={{ fontSize: '24px', width: '60px' }} icon={faChevronDown} />
+        <FontAwesomeIcon style={{ fontSize: '24px', width: '60px' }} icon={faChevronDown} onClick={ClearAll}/>
         <StyledInput
         placeholder="What needs to be done?"
         value={novaTarefa}
@@ -171,7 +182,7 @@ export default function App() {
             <Link to={"/todone"}><button>Active</button></Link>
             <Link to={"/completed"}><button>Completed</button></Link>
           </div>
-          <span>Clear completed</span>
+          <span onClick={ClearCompleted}>Clear completed</span>
       </StyledFooter>
       </StyledSection>
     </StyledContainer>
