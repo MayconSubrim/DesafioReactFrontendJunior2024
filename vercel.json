@@ -6,10 +6,8 @@
         "use": "@vercel/node"
       }
     ],
-    "package": {
-      "engines": {
-        "node": "6.9.0",
-        "npm": "10.16.0"
-      }
+    "engines": {
+      "node": "14.x",
+      "npm": "7.x"
     }
   }
