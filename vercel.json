@@ -1,14 +1,7 @@
 {
-    "version": 2,
     "rewrites": [
       {
         "source" : "/(.*)", "destination": "/"
       }
-    ],
-    "builds": [
-      {
-        "src": "build",
-        "use": "@vercel/node"
-      }
     ]
-  }
+}
