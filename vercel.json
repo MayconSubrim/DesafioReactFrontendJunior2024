@@ -19,6 +19,14 @@
         {
           "src" : "/",
           "dest" : "/"
+        },
+        {
+          "src" : "/completed",
+          "dest" : "/"
+        },
+        {
+          "src" : "/todone",
+          "dest" : "/"
         }
     ]
   }
