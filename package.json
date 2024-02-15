@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.4",
+    "@types/react-router-dom": "^5.3.3",
     "nock": "^13.1.1"
   }
 }

@@ -96,7 +96,7 @@ export default function App() {
         <StyledInput
         placeholder="What needs to be done?"
         value={novaTarefa}
-        onChange={(e) => setNovaTarefa(e.target.value)}
+        onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setNovaTarefa(e.target.value)}
         onKeyDown={handleKeyDown}
         ></StyledInput>
       </div>
@@ -105,33 +105,10 @@ export default function App() {
 
       {!carregando && (
         
-          <Routes>
-          <Route
-            path=""
-            element={
-            <ul style={{listStyle: "none", padding : "0"}} onBlur={handleEditBlur}>
-              {dados.map((item) => (
-                    <TodoItem
-                    key={item.id}
-                    item={item}
-                    isEditing={isEditing}
-                    setIsEditing={setIsEditing}
-                    editingTask={editingTask}
-                    handleEditBlur={handleEditBlur}
-                    handleEditKeyPress={handleEditKeyPress}
-                    setEditingTask={setEditingTask}
-                    dados={dados}
-                    setDados={setDados}
-                    />
-            ))}
-          </ul>
-            }
-          />
-          <Route path="/completed" element={
-            <ul style={{ listStyle: "none", padding: "0" }} onBlur={handleEditBlur}>
-            {dados.map((item) => {
-              if (item.isDone) {
-                return (
+          <Routes><Route
+              path=""
+              element={<ul style={{ listStyle: "none", padding: "0" }} onBlur={handleEditBlur}>
+                {dados.map((item) => (
                   <TodoItem
                     key={item.id}
                     item={item}
@@ -142,38 +119,47 @@ export default function App() {
                     handleEditKeyPress={handleEditKeyPress}
                     setEditingTask={setEditingTask}
                     dados={dados}
-                    setDados={setDados}
-                  />
-                );
-              }
-              return null;
-            })}
-          </ul>
-          }/>
-          <Route path="/todone" element={
-            <ul style={{ listStyle: "none", padding: "0" }} onBlur={handleEditBlur}>
-            {dados.map((item) => {
-              if (!item.isDone) {
-                return (
-                  <TodoItem
-                    key={item.id}
-                    item={item}
-                    isEditing={isEditing}
-                    setIsEditing={setIsEditing}
-                    editingTask={editingTask}
-                    handleEditBlur={handleEditBlur}
-                    handleEditKeyPress={handleEditKeyPress}
-                    setEditingTask={setEditingTask}
-                    dados={dados}
-                    setDados={setDados}
-                  />
-                );
-              }
-              return null;
-            })}
-          </ul>
-          }/>
-          </Routes>
+                    setDados={setDados} />
+                ))}
+              </ul>} /><Route path="/completed" element={<ul style={{ listStyle: "none", padding: "0" }} onBlur={handleEditBlur}>
+                {dados.map((item) => {
+                  if (item.isDone) {
+                    return (
+                      <TodoItem
+                        key={item.id}
+                        item={item}
+                        isEditing={isEditing}
+                        setIsEditing={setIsEditing}
+                        editingTask={editingTask}
+                        handleEditBlur={handleEditBlur}
+                        handleEditKeyPress={handleEditKeyPress}
+                        setEditingTask={setEditingTask}
+                        dados={dados}
+                        setDados={setDados} />
+                    );
+                  }
+                  return null;
+                })}
+              </ul>} /><Route path="/todone" element={<ul style={{ listStyle: "none", padding: "0" }} onBlur={handleEditBlur}>
+                {dados.map((item) => {
+                  if (!item.isDone) {
+                    return (
+                      <TodoItem
+                        key={item.id}
+                        item={item}
+                        isEditing={isEditing}
+                        setIsEditing={setIsEditing}
+                        editingTask={editingTask}
+                        handleEditBlur={handleEditBlur}
+                        handleEditKeyPress={handleEditKeyPress}
+                        setEditingTask={setEditingTask}
+                        dados={dados}
+                        setDados={setDados} />
+                    );
+                  }
+                  return null;
+                })}
+              </ul>} /></Routes>
       )}
        <StyledFooter>
           <p>{countIsDone} items left!</p>

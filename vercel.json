@@ -1,19 +1,8 @@
 {
-    "env": {
-      "NODE_OPTIONS": "--openssl-legacy-provider"
-    },
-    "routes" : [
-        {
-          "src" : "/",
-          "dest" : "/"
-        },
-        {
-          "src" : "/completed",
-          "dest" : "/"
-        },
-        {
-          "src" : "/todone",
-          "dest" : "/"
-        }
-    ]
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ]
   }
