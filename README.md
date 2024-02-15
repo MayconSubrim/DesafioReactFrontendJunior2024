@@ -62,3 +62,5 @@ Tem um tempinho a mais? Acha que pode fazer mais? Então aqui vai alguns desafio
 (x) footer mostrando quantas todos faltam fazer;
 (x) modularizar o app para deixar mais clean
 
+Deploy da aplicação : https://desafio-react-frontend-junior2024-m3squ20da-mayconsubrim.vercel.app/   
+
